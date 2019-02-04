@@ -10,30 +10,41 @@ Este repositório contém o código fonte do componente **csvintoexcel**. Este c
 * O componente **csvintoexcel** funciona com argumentos de linha de comando (tanto Windows quanto Linux). Com o argumento '-h' mostra o help da a aplicação.
 
 ```bat
-C:\My Git\workspace-github\csvintoexcel\dist>java -jar csvintoexcel.jar -h
-csvintoexcel [v01.00.20190202] Tool to join excel template with csv content file.
-  [-h|--help]
-        Print help message
-
-  [-e <input-excel-file>]
-        Nome do arquivo que contém Pasta de trabalho EXCEL (.xls ou .xlsx) usada na juncao. Ex: Template.xlsx
-
-  [-s <input-excel-sheet-number>]
-        Numero sequencial da PLANILHA dentro da Pasta de trabalho usada na juncao. Ex: 1 (primeira aba. Default é primeira planilha)
-
-  [-r <input-excel-row-number>]
-        Numero da LINHA inicial da planilha usada na juncao. Ex: 2 (segunda linha. Default é segunda linha)
-
-  [-c <input-excel-column-number>]
-        Numero da COLUNA inicial da planilha. Ex: 1 (primeira coluna. Default é primeira linha)
-
-  [-f <input-csv-file>]
-        Nome do arquivo (.csv) que contém o conteúdo usado na juncao. Ex: dados.csv (separador ;)
-
-  [-i <input-csv-file-ignore-header>]
-        Numero de LINHAS DE CABECALHO dos dados ignorados na juncao. Ex: 1 (Default é 1)
-
-Execution aborted!
+C:\My Git\workspace-github\csvintoexcel\dist>java -jar csvintoexcel.jar
+Missing required options: e, f, o
+usage: csvintoexcel [<args-options-list>] - v.2019.02.03
+ -c,--input-excel-column-number <arg>      Numero da COLUNA inicial da
+                                           planilha. Ex: 1 (primeira
+                                           coluna. Default e primeira
+                                           linha)
+ -e,--input-excel-file <arg>               Nome do arquivo que contem
+                                           Pasta de trabalho EXCEL (.xls
+                                           ou .xlsx) usada na juncao. Ex:
+                                           template.xlsx
+ -f,--input-csv-file <arg>                 Nome do arquivo (.csv) que
+                                           contem o conte·do usado na
+                                           juncao. Ex: dados.csv
+                                           (separador ;)
+ -g,--input-csv-file-ignore-header <arg>   Numero de LINHAS DE CABECALHO
+                                           dos dados ignorados na juncao.
+                                           Ex: 1 (Default e 1)
+ -h,--help                                 shows usage help message. See
+                                           more
+                                           https://github.com/josemarsilva
+                                           /csvintoexcel
+ -o,--output-excel-file <arg>              Nome do arquivo que da Pasta de
+                                           trabalho EXCEL (.xls ou .xlsx)
+                                           conter a juncao. Ex:
+                                           template-com-dados.xlsx
+ -r,--input-excel-row-number <arg>         Numero da LINHA inicial da
+                                           planilha usada na juncao. Ex: 2
+                                           (segunda linha. Default e
+                                           segunda linha)
+ -s,--input-excel-sheet-number <arg>       Numero sequencial da PLANILHA
+                                           dentro da Pasta de trabalho
+                                           usada na juncao. Ex: 1
+                                           (primeira aba. Default e
+                                           primeira planilha)
 ```
 
 
@@ -45,7 +56,7 @@ Execution aborted!
 
 #### Diagrama de Caso de Uso
 
-![UseCaseDiagram](doc/UseCaseDiagram%20-%20Context%20-csvintoexcel.png) 
+![UseCaseDiagram](doc/UseCaseDiagram%20-%20Context%20-CsvIntoExcel.png) 
 
 
 ### 2.5. Requisitos ###
