@@ -56,7 +56,7 @@ usage: csvintoexcel [<args-options-list>] - v.2019.02.03
 
 #### Diagrama de Caso de Uso
 
-![UseCaseDiagram](doc/UseCaseDiagram%20-%20Context%20-CsvIntoExcel.png) 
+![UseCaseDiagram](doc/UseCaseDiagram%20-%20Context%20-%20CsvIntoExcel.png)
 
 
 ### 2.5. Requisitos ###
