@@ -244,6 +244,7 @@ public class CsvIntoExcel {
 				}
 				currentLineNumber++;
 			}
+			System.out.println(msgCopy + " - '%s'[%s] -> '%s'[%s]".replaceFirst("%s", this.cliArgsParser.getInputCsvFileOption()).replaceFirst("%s", String.valueOf(currentLineNumber)).replaceFirst("%s", this.cliArgsParser.getOutputExcelFileOption()).replaceFirst("%s", String.valueOf(nRowNumWorksheet) ));
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			System.exit(-1);
