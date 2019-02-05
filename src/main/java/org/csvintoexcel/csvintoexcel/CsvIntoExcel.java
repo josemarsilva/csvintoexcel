@@ -2,7 +2,6 @@ package org.csvintoexcel.csvintoexcel;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -20,8 +20,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.csvintoexcel.cli.CliArgsParser;
-
-import com.microsoft.schemas.office.visio.x2012.main.CellType;
 
 
 public class CsvIntoExcel {
@@ -37,7 +35,7 @@ public class CsvIntoExcel {
 	
 	private Workbook workbook;
 	private Sheet worksheet;
-	private ArrayList<CellStyle> cellStyles = new ArrayList<CellStyle>();
+	private HashMap<Integer, CellStyle> cellStyles = new HashMap<Integer, CellStyle>();
 
 
     /*
@@ -118,7 +116,9 @@ public class CsvIntoExcel {
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				CellStyle cellStyle = cell.getCellStyle();
-				cellStyles.add(j,cellStyle);
+				if (cellStyle!=null) {
+					cellStyles.put(j,cellStyle);
+				}
 			}
 		}
 		

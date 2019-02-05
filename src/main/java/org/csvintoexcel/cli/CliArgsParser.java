@@ -24,7 +24,7 @@ public class CliArgsParser {
 	
 	// Constants ...
 	public final static String APP_NAME = new String("csvintoexcel");
-	public final static String APP_VERSION = new String("v.2019.02.04");
+	public final static String APP_VERSION = new String("v.20190205.1405");
 	public final static String APP_USAGE = new String(APP_NAME + " [<args-options-list>] - "+ APP_VERSION);
 
 	// Constants defaults ...
@@ -132,13 +132,13 @@ public class CliArgsParser {
 	        } else {
 	        	
 	        	// Set properties from Options ...
-	        	this.setInputExcelFileOption( cmdLine.getOptionValue("input-excel-file", "") );
-	        	this.setInputExcelSheetNumberOption( (StringUtils.isBlank( (String) cmdLine.getParsedOptionValue("input-excel-sheet-number")) ? DEFAULT_EXCEL_SHEET_NUMBER : (Integer) cmdLine.getParsedOptionValue("input-excel-sheet-number") ) );
-	        	this.setInputExcelRowNumberOption( (StringUtils.isBlank( (String) cmdLine.getParsedOptionValue("input-excel-row-number")) ? DEFAULT_EXCEL_ROW_NUMBER : (Integer) cmdLine.getParsedOptionValue("input-excel-row-number") ) );
-	        	this.setInputExcelColumnNumberOption( (StringUtils.isBlank( (String) cmdLine.getParsedOptionValue("input-excel-column-number")) ? DEFAULT_EXCEL_COLUMN_NUMBER : (Integer) cmdLine.getParsedOptionValue("input-excel-column-number") ) );
+	        	this.setInputExcelFileOption( cmdLine.getOptionValue("input-excel-file", "") );	        	
 	        	this.setInputCsvFileOption( cmdLine.getOptionValue("input-csv-file", "") );
-	        	this.setInputCsvFileIgnoreHeaderOption( (StringUtils.isBlank( (String) cmdLine.getParsedOptionValue("input-csv-file-ignore-header")) ? DEFAULT_CSV_FILE_IGNORE_HEADER : (Integer) cmdLine.getParsedOptionValue("input-csv-file-ignore-header") ) );
 	        	this.setOutputExcelFileOption( cmdLine.getOptionValue("output-excel-file", "") );
+	        	this.setInputExcelSheetNumberOption( (cmdLine.getParsedOptionValue("input-excel-sheet-number")==null) ? DEFAULT_EXCEL_SHEET_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-sheet-number").toString() ) );
+	        	this.setInputExcelRowNumberOption( (cmdLine.getParsedOptionValue("input-excel-row-number")==null) ? DEFAULT_EXCEL_ROW_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-row-number").toString() ) );
+	        	this.setInputExcelColumnNumberOption( (cmdLine.getParsedOptionValue("input-excel-column-number")==null) ? DEFAULT_EXCEL_COLUMN_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-column-number").toString() ) );
+	        	this.setInputCsvFileIgnoreHeaderOption( (cmdLine.getParsedOptionValue("input-csv-file-ignore-header")==null) ? DEFAULT_CSV_FILE_IGNORE_HEADER : Integer.parseInt( cmdLine.getParsedOptionValue("input-csv-file-ignore-header").toString() ) );
 	        	
 	        	// Check arguments Options ...
 	        	try {
