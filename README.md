@@ -12,17 +12,22 @@ Este repositório contém o código fonte do componente **csvintoexcel**. Este c
 ```bat
 C:\My Git\workspace-github\csvintoexcel\dist>java -jar csvintoexcel.jar
 Missing required options: e, f, o
-usage: csvintoexcel [<args-options-list>] - v.2019.02.03
+usage: csvintoexcel [<args-options-list>] - v.2019.02.11
  -c,--input-excel-column-number <arg>      Numero da COLUNA inicial da
-                                           planilha. Ex: 1 (primeira
-                                           coluna. Default e primeira
-                                           linha)
+                                           planilha. Ex: 0-n (0=primeira).
+                                           Default 0
+ -d,--input-excel-data-type-list <arg>     Lista dos tipos de dados
+                                           (data-type) das células
+                                           separados por '-' conforme
+                                           'https://dzone.com/articles/jav
+                                           a-string-format-examples'. Ex:
+                                           %s-%d-%f
  -e,--input-excel-file <arg>               Nome do arquivo que contem
                                            Pasta de trabalho EXCEL (.xls
                                            ou .xlsx) usada na juncao. Ex:
                                            template.xlsx
  -f,--input-csv-file <arg>                 Nome do arquivo (.csv) que
-                                           contem o conte·do usado na
+                                           contem o conteúdo usado na
                                            juncao. Ex: dados.csv
                                            (separador ;)
  -g,--input-csv-file-ignore-header <arg>   Numero de LINHAS DE CABECALHO
@@ -37,14 +42,12 @@ usage: csvintoexcel [<args-options-list>] - v.2019.02.03
                                            conter a juncao. Ex:
                                            template-com-dados.xlsx
  -r,--input-excel-row-number <arg>         Numero da LINHA inicial da
-                                           planilha usada na juncao. Ex: 2
-                                           (segunda linha. Default e
-                                           segunda linha)
+                                           planilha usada na juncao. Ex:
+                                           0-n (0=primeira). Default 2
  -s,--input-excel-sheet-number <arg>       Numero sequencial da PLANILHA
                                            dentro da Pasta de trabalho
-                                           usada na juncao. Ex: 1
-                                           (primeira aba. Default e
-                                           primeira planilha)
+                                           usada na juncao. Ex: 0-n
+                                           (0=primeira). Default 0
 ```
 
 

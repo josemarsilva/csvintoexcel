@@ -24,7 +24,7 @@ public class CliArgsParser {
 	
 	// Constants ...
 	public final static String APP_NAME = new String("csvintoexcel");
-	public final static String APP_VERSION = new String("v.20190205.1405");
+	public final static String APP_VERSION = new String("v.2019.02.11");
 	public final static String APP_USAGE = new String(APP_NAME + " [<args-options-list>] - "+ APP_VERSION);
 
 	// Constants defaults ...
@@ -41,6 +41,7 @@ public class CliArgsParser {
     private int inputExcelSheetNumberOption = DEFAULT_EXCEL_SHEET_NUMBER;
     private int inputExcelRowNumberOption = DEFAULT_EXCEL_ROW_NUMBER;
     private int inputExcelColumnNumberOption = DEFAULT_EXCEL_COLUMN_NUMBER;
+    private String inputExcelDataTypeList = new String("");
     private String inputCsvFileOption = new String("");
     private int inputCsvFileIgnoreHeaderOption = DEFAULT_CSV_FILE_IGNORE_HEADER;
     private String outputExcelFileOption = new String("");
@@ -71,23 +72,29 @@ public class CliArgsParser {
                 .longOpt("input-excel-sheet-number") 
                 .required(false) 
                 .type(Number.class)
-                .desc("Numero sequencial da PLANILHA dentro da Pasta de trabalho usada na juncao. Ex: 1 (primeira aba. Default e primeira planilha)") 
+                .desc("Numero sequencial da PLANILHA dentro da Pasta de trabalho usada na juncao. Ex: 0-n (0=primeira). Default 0") 
         		.hasArg()
                 .build(); 
         Option inputExcelRowNumberOption = Option.builder("r")
                 .longOpt("input-excel-row-number") 
                 .required(false) 
                 .type(Number.class)
-                .desc("Numero da LINHA inicial da planilha usada na juncao. Ex: 2 (segunda linha. Default e segunda linha)") 
+                .desc("Numero da LINHA inicial da planilha usada na juncao. Ex: 0-n (0=primeira). Default 2") 
         		.hasArg()
                 .build(); 
         Option inputExcelColumnNumberOption = Option.builder("c")
                 .longOpt("input-excel-column-number") 
                 .required(false) 
                 .type(Number.class)
-                .desc("Numero da COLUNA inicial da planilha. Ex: 1 (primeira coluna. Default e primeira linha)") 
+                .desc("Numero da COLUNA inicial da planilha. Ex: 0-n (0=primeira). Default 0") 
         		.hasArg()
                 .build(); 
+        Option inputExcelDataTypeList = Option.builder("d")
+        		.longOpt("input-excel-data-type-list") 
+        		.required(false) 
+        		.desc("Lista dos tipos de dados (data-type) das células separados por '-' conforme 'https://dzone.com/articles/java-string-format-examples'. Ex: %s-%d-%f")
+        		.hasArg()
+        		.build();
         Option inputCsvFileOption = Option.builder("f")
                 .longOpt("input-csv-file") 
                 .required(true) 
@@ -115,6 +122,7 @@ public class CliArgsParser {
         options.addOption(inputExcelSheetNumberOption);
         options.addOption(inputExcelRowNumberOption);
         options.addOption(inputExcelColumnNumberOption);
+        options.addOption(inputExcelDataTypeList);
         options.addOption(inputCsvFileOption);
         options.addOption(inputCsvFileIgnoreHeaderOption);
         options.addOption(outputExcelFileOption);
@@ -133,12 +141,13 @@ public class CliArgsParser {
 	        	
 	        	// Set properties from Options ...
 	        	this.setInputExcelFileOption( cmdLine.getOptionValue("input-excel-file", "") );	        	
-	        	this.setInputCsvFileOption( cmdLine.getOptionValue("input-csv-file", "") );
-	        	this.setOutputExcelFileOption( cmdLine.getOptionValue("output-excel-file", "") );
 	        	this.setInputExcelSheetNumberOption( (cmdLine.getParsedOptionValue("input-excel-sheet-number")==null) ? DEFAULT_EXCEL_SHEET_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-sheet-number").toString() ) );
 	        	this.setInputExcelRowNumberOption( (cmdLine.getParsedOptionValue("input-excel-row-number")==null) ? DEFAULT_EXCEL_ROW_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-row-number").toString() ) );
 	        	this.setInputExcelColumnNumberOption( (cmdLine.getParsedOptionValue("input-excel-column-number")==null) ? DEFAULT_EXCEL_COLUMN_NUMBER : Integer.parseInt( cmdLine.getParsedOptionValue("input-excel-column-number").toString() ) );
+	        	this.setInputExcelDataTypeList( cmdLine.getOptionValue("input-excel-data-type-list", "") );	        	
+	        	this.setInputCsvFileOption( cmdLine.getOptionValue("input-csv-file", "") );
 	        	this.setInputCsvFileIgnoreHeaderOption( (cmdLine.getParsedOptionValue("input-csv-file-ignore-header")==null) ? DEFAULT_CSV_FILE_IGNORE_HEADER : Integer.parseInt( cmdLine.getParsedOptionValue("input-csv-file-ignore-header").toString() ) );
+	        	this.setOutputExcelFileOption( cmdLine.getOptionValue("output-excel-file", "") );
 	        	
 	        	// Check arguments Options ...
 	        	try {
@@ -170,6 +179,8 @@ public class CliArgsParser {
 		}
 		
 	}
+	
+	// Getters and Setters ...
 
 	public String getInputExcelFileOption() {
 		return inputExcelFileOption;
@@ -211,6 +222,16 @@ public class CliArgsParser {
 	}
 
 
+	public String getInputExcelDataTypeList() {
+		return this.inputExcelDataTypeList;
+	}
+
+	
+	private void setInputExcelDataTypeList(String optionValue) {
+		this.inputExcelDataTypeList = optionValue;
+	}
+
+	
 	public String getInputCsvFileOption() {
 		return inputCsvFileOption;
 	}

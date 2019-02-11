@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -231,6 +232,25 @@ public class CsvIntoExcel {
 						}
 						// Set Value ...
 						cell.setCellValue(csvValue);
+						// Set DataType ...
+						if (csvValue!=null) {
+							if (!csvValue.equals("")) {
+								if (cliArgsParser.getInputExcelDataTypeList() != null ) {
+									ArrayList aDataTypeList= new ArrayList(Arrays.asList(cliArgsParser.getInputExcelDataTypeList().split("-")));
+									if(j<=aDataTypeList.size()) {
+										if (aDataTypeList.get(j) != null) {
+											if (aDataTypeList.get(j).equals("%d")) {
+												// %d - int, double, bigint ...
+												cell.setCellValue(new BigDecimal(csvValue).doubleValue());
+											} else if (aDataTypeList.get(j).equals("%f")) {
+												// %f - float, decimal, etc ...
+												cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
+											}
+										}
+									}
+								}
+							}
+						}
 						// Set Format / Style ...
 						if (j<cellStyles.size()) {
 							CellStyle cellStyle = cellStyles.get(j);
