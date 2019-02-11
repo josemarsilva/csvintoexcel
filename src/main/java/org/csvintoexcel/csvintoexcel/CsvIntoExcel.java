@@ -86,7 +86,7 @@ public class CsvIntoExcel {
 		}
 		
 		// Open Worksheet ..
-		System.out.print ("\r"+msgCopy+" - opening worksheet index-position (%s) ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption()) ));
+		System.out.println (""+msgCopy+" - opening worksheet index-position (%s) ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption()) ));
 		this.worksheet = this.workbook.getSheetAt(this.cliArgsParser.getInputExcelSheetNumberOption());
 		if (this.worksheet==null) {
 			try {
@@ -99,7 +99,7 @@ public class CsvIntoExcel {
 		}
 		
 		// Getting first row ..
-		System.out.print ("\r"+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
+		System.out.print (""+msgCopy+" - row[%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
 		Row row = worksheet.getRow( this.cliArgsParser.getInputExcelRowNumberOption() );
 		if (row==null) {
 			try {
@@ -113,7 +113,7 @@ public class CsvIntoExcel {
 		
 		// Getting cell ..
 		for (int j=this.cliArgsParser.getInputExcelColumnNumberOption();j<=row.getLastCellNum();j++) {
-			System.out.print ("\r"+msgCopy+" - cell[%s,%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
+			System.out.print ("cell[%s,%s], ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				CellStyle cellStyle = cell.getCellStyle();
@@ -135,7 +135,7 @@ public class CsvIntoExcel {
 		System.out.println(msgCopy + " ...");
 		
 		// Getting first row ..
-		System.out.print ("\r"+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
+		System.out.print (""+msgCopy+" - row[%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
 		Row row = worksheet.getRow( this.cliArgsParser.getInputExcelRowNumberOption() );
 		if (row==null) {
 			try {
@@ -150,23 +150,21 @@ public class CsvIntoExcel {
 		
 		// Cleaning all cells from first rows ...
 		for (int j=this.cliArgsParser.getInputExcelColumnNumberOption();j<=row.getLastCellNum();j++) {
-			System.out.print ("\r"+msgCopy+" - cell[%s,%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
+			System.out.print ("cell[%s,%s], ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				cell.setCellValue("");
 			}
 		}
+		System.out.println("");
 		
 		
 		// Remove all remaining rows after first row ...
 		for (int i=this.worksheet.getLastRowNum();i>this.cliArgsParser.getInputExcelRowNumberOption();i--) {
-			System.out.print ("\r"+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(i) ));
+			System.out.println (""+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(i) ));
 			Row rowToRemove = worksheet.getRow( i );
 			worksheet.removeRow(rowToRemove);
 		}
-
-		
-		System.out.println("");
 	}
 	
 	
@@ -176,6 +174,12 @@ public class CsvIntoExcel {
 	public void copyContents() {
 		String msgCopy = new String("Copy contents");
 		System.out.println(msgCopy + " ...");
+		// Getting Array List of datatype ...
+		ArrayList aDataTypeList = null;
+		if (cliArgsParser.getInputExcelDataTypeList() != null ) {
+			aDataTypeList = new ArrayList(Arrays.asList(cliArgsParser.getInputExcelDataTypeList().split("-")));
+		}
+		// Reading file ...
 		BufferedReader br = null;
 		FileReader fr = null;
 		int currentLineNumber = 0;
@@ -235,16 +239,21 @@ public class CsvIntoExcel {
 						// Set DataType ...
 						if (csvValue!=null) {
 							if (!csvValue.equals("")) {
-								if (cliArgsParser.getInputExcelDataTypeList() != null ) {
-									ArrayList aDataTypeList= new ArrayList(Arrays.asList(cliArgsParser.getInputExcelDataTypeList().split("-")));
-									if(j<=aDataTypeList.size()) {
-										if (aDataTypeList.get(j) != null) {
-											if (aDataTypeList.get(j).equals("%d")) {
-												// %d - int, double, bigint ...
+								if(j<aDataTypeList.size()) {
+									if (aDataTypeList.get(j) != null) {
+										if (aDataTypeList.get(j).equals("%d")) {
+											// %d - int, double, bigint ...
+											try {
 												cell.setCellValue(new BigDecimal(csvValue).doubleValue());
-											} else if (aDataTypeList.get(j).equals("%f")) {
-												// %f - float, decimal, etc ...
-												cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
+											} catch(Exception e) {
+												// Sorry! Could't convert as BigDecimal
+											}
+										} else if (aDataTypeList.get(j).equals("%f")) {
+											// %f - float, decimal, etc ...
+											try {
+											cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
+											} catch(Exception e) {
+												// Sorry! Could't convert as BigDecimal
 											}
 										}
 									}
