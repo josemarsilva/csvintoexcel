@@ -154,6 +154,7 @@ public class CsvIntoExcel {
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				cell.setCellValue("");
+				cell.setCellType(Cell.CELL_TYPE_BLANK);
 			}
 		}
 		System.out.println("");
@@ -234,37 +235,42 @@ public class CsvIntoExcel {
 								}
 							}
 						}
-						// Set Format / Style ...
-						if (j<cellStyles.size()) {
-							CellStyle cellStyle = cellStyles.get(j);
-							if (cellStyle != null) {
-								cell.setCellStyle(cellStyle);
-							}
-						}
 						// Set Value ...
-						cell.setCellValue(csvValue);
+						cell.setCellValue(csvValue); // as String
+						boolean bCanSetFormatStyle = true;
 						// Set DataType ...
 						if (csvValue!=null) {
 							if (!csvValue.equals("")) {
 								if(j<aDataTypeList.size()) {
 									if (aDataTypeList.get(j) != null) {
 										if (aDataTypeList.get(j).equals("%d")) {
+											bCanSetFormatStyle = false;
 											// %d - int, double, bigint ...
 											try {
 												cell.setCellValue(new BigDecimal(csvValue).doubleValue());
+												cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 											} catch(Exception e) {
 												// Sorry! Could't convert as BigDecimal
 											}
 										} else if (aDataTypeList.get(j).equals("%f")) {
+											bCanSetFormatStyle = false;
 											// %f - float, decimal, etc ...
 											try {
-											cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
+												cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
+												cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 											} catch(Exception e) {
 												// Sorry! Could't convert as BigDecimal
 											}
 										}
 									}
 								}
+							}
+						}
+						// Set Format / Style ...
+						if (bCanSetFormatStyle && j<cellStyles.size()) {
+							CellStyle cellStyle = cellStyles.get(j);
+							if (cellStyle != null) {
+								cell.setCellStyle(cellStyle);
 							}
 						}
 						
