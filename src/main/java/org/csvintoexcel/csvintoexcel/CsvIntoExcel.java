@@ -234,6 +234,13 @@ public class CsvIntoExcel {
 								}
 							}
 						}
+						// Set Format / Style ...
+						if (j<cellStyles.size()) {
+							CellStyle cellStyle = cellStyles.get(j);
+							if (cellStyle != null) {
+								cell.setCellStyle(cellStyle);
+							}
+						}
 						// Set Value ...
 						cell.setCellValue(csvValue);
 						// Set DataType ...
@@ -258,13 +265,6 @@ public class CsvIntoExcel {
 										}
 									}
 								}
-							}
-						}
-						// Set Format / Style ...
-						if (j<cellStyles.size()) {
-							CellStyle cellStyle = cellStyles.get(j);
-							if (cellStyle != null) {
-								cell.setCellStyle(cellStyle);
 							}
 						}
 						
