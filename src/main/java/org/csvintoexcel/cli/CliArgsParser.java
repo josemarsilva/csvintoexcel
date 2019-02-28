@@ -24,7 +24,7 @@ public class CliArgsParser {
 	
 	// Constants ...
 	public final static String APP_NAME = new String("csvintoexcel");
-	public final static String APP_VERSION = new String("v.2019.02.13.1405");
+	public final static String APP_VERSION = new String("v.2019.02.22");
 	public final static String APP_USAGE = new String(APP_NAME + " [<args-options-list>] - "+ APP_VERSION);
 
 	// Constants defaults ...
@@ -45,6 +45,7 @@ public class CliArgsParser {
     private String inputCsvFileOption = new String("");
     private int inputCsvFileIgnoreHeaderOption = DEFAULT_CSV_FILE_IGNORE_HEADER;
     private String outputExcelFileOption = new String("");
+    private String outputExcelUtfEncoding = new String("");
 
 
     /*
@@ -86,13 +87,13 @@ public class CliArgsParser {
                 .longOpt("input-excel-column-number") 
                 .required(false) 
                 .type(Number.class)
-                .desc("Numero da COLUNA inicial da planilha. Ex: 0-n (0=primeira). Default 0") 
+                .desc("Numero da COLUNA inicial da planilha. Ex: 0-n (0=primeira coluna). Default 0") 
         		.hasArg()
                 .build(); 
         Option inputExcelDataTypeList = Option.builder("d")
         		.longOpt("input-excel-data-type-list") 
         		.required(false) 
-        		.desc("Lista dos tipos de dados (data-type) das células separados por '-' conforme 'https://dzone.com/articles/java-string-format-examples'. Ex: %s-%d-%f")
+        		.desc("Lista dos tipos de dados (data-type) das células separados por '-'. Onde: 's': String; 'd': Numérico; 'f': decimais; 'u': String ")
         		.hasArg()
         		.build();
         Option inputCsvFileOption = Option.builder("f")
@@ -114,6 +115,12 @@ public class CliArgsParser {
         		.desc("Nome do arquivo que da Pasta de trabalho EXCEL (.xls ou .xlsx) conter a juncao. Ex: template-com-dados.xlsx")
         		.hasArg()
                 .build(); 
+        Option outputExcelUtfEncoding = Option.builder("u")
+        		.longOpt("output-excel-utf-encoding") 
+        		.required(false) 
+        		.desc("UTF Encoding da planilha. Ex: UTF-8 (Default nenhum econding sera usado)")
+        		.hasArg()
+        		.build();
         
         
 		// Options adding configuration ...
@@ -126,6 +133,7 @@ public class CliArgsParser {
         options.addOption(inputCsvFileOption);
         options.addOption(inputCsvFileIgnoreHeaderOption);
         options.addOption(outputExcelFileOption);
+        options.addOption(outputExcelUtfEncoding);
         
         
         // CommandLineParser ...
@@ -148,6 +156,7 @@ public class CliArgsParser {
 	        	this.setInputCsvFileOption( cmdLine.getOptionValue("input-csv-file", "") );
 	        	this.setInputCsvFileIgnoreHeaderOption( (cmdLine.getParsedOptionValue("input-csv-file-ignore-header")==null) ? DEFAULT_CSV_FILE_IGNORE_HEADER : Integer.parseInt( cmdLine.getParsedOptionValue("input-csv-file-ignore-header").toString() ) );
 	        	this.setOutputExcelFileOption( cmdLine.getOptionValue("output-excel-file", "") );
+	        	this.setOutputExcelUtfEncoding( cmdLine.getOptionValue("output-excel-utf-encoding", "") );
 	        	
 	        	// Check arguments Options ...
 	        	try {
@@ -261,6 +270,15 @@ public class CliArgsParser {
 		this.outputExcelFileOption = outputExcelFileOption;
 	}
 	
+	public String getOutputExcelUtfEncoding() {
+		return outputExcelUtfEncoding;
+	}
 
+
+	public void setOutputExcelUtfEncoding(String outputExcelUtfEncoding) {
+		this.outputExcelUtfEncoding = outputExcelUtfEncoding;
+	}
+
+	//	outputExcelUtfEncoding
 
 }

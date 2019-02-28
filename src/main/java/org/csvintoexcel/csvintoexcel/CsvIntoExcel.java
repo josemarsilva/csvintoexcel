@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -243,23 +244,33 @@ public class CsvIntoExcel {
 							if (!csvValue.equals("")) {
 								if(j<aDataTypeList.size()) {
 									if (aDataTypeList.get(j) != null) {
-										if (aDataTypeList.get(j).equals("%d")) {
-											bCanSetFormatStyle = false;
-											// %d - int, double, bigint ...
+										if (aDataTypeList.get(j).equals("d")) {
+											// 'd' - int, double, bigint ...
 											try {
 												cell.setCellValue(new BigDecimal(csvValue).doubleValue());
 												cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 											} catch(Exception e) {
 												// Sorry! Could't convert as BigDecimal
 											}
-										} else if (aDataTypeList.get(j).equals("%f")) {
-											bCanSetFormatStyle = false;
-											// %f - float, decimal, etc ...
+										} else if (aDataTypeList.get(j).equals("f")) {
+											// 'f' - float, decimal, etc ...
 											try {
 												cell.setCellValue(new BigDecimal(csvValue.replaceAll(",", ".")).doubleValue());
 												cell.setCellType(Cell.CELL_TYPE_NUMERIC);
 											} catch(Exception e) {
 												// Sorry! Could't convert as BigDecimal
+											}
+										} else if (aDataTypeList.get(j).equals("u")) {
+											// 'u' - String with UTF Encoding conversion ...
+											if (!cliArgsParser.getOutputExcelUtfEncoding().isEmpty()) {
+												try {
+													System.out.print(" [" + csvValue + "]"+ "->" + cliArgsParser.getOutputExcelUtfEncoding() );
+													csvValue = URLEncoder.encode(csvValue, cliArgsParser.getOutputExcelUtfEncoding()); 
+													System.out.print(" = [" + csvValue + "]" );
+												} catch(Exception e) {
+													System.out.println(" Error !");
+													// Sorry! Could't convert UTF
+												}
 											}
 										}
 									}
