@@ -12,22 +12,21 @@ Este repositório contém o código fonte do componente **csvintoexcel**. Este c
 ```bat
 C:\My Git\workspace-github\csvintoexcel\dist>java -jar csvintoexcel.jar
 Missing required options: e, f, o
-usage: csvintoexcel [<args-options-list>] - v.2019.02.11
+usage: csvintoexcel [<args-options-list>] - v.2019.03.02
  -c,--input-excel-column-number <arg>      Numero da COLUNA inicial da
-                                           planilha. Ex: 0-n (0=primeira).
-                                           Default 0
+                                           planilha. Ex: 0-n (0=primeira
+                                           coluna). Default 0
  -d,--input-excel-data-type-list <arg>     Lista dos tipos de dados
-                                           (data-type) das células
-                                           separados por '-' conforme
-                                           'https://dzone.com/articles/jav
-                                           a-string-format-examples'. Ex:
-                                           %s-%d-%f
+                                           (data-type) das celulas
+                                           separados por '-'. Onde: 's':
+                                           String; 'd': Numerico; 'f':
+                                           decimais.
  -e,--input-excel-file <arg>               Nome do arquivo que contem
                                            Pasta de trabalho EXCEL (.xls
                                            ou .xlsx) usada na juncao. Ex:
                                            template.xlsx
  -f,--input-csv-file <arg>                 Nome do arquivo (.csv) que
-                                           contem o conteúdo usado na
+                                           contem o conteudo usado na
                                            juncao. Ex: dados.csv
                                            (separador ;)
  -g,--input-csv-file-ignore-header <arg>   Numero de LINHAS DE CABECALHO
@@ -48,6 +47,9 @@ usage: csvintoexcel [<args-options-list>] - v.2019.02.11
                                            dentro da Pasta de trabalho
                                            usada na juncao. Ex: 0-n
                                            (0=primeira). Default 0
+ -u,--output-excel-utf-encoding <arg>      UTF Encoding da planilha. Ex:
+                                           UTF-8 (Default nenhum econding
+                                           sera usado)
 ```
 
 
