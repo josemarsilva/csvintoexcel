@@ -24,7 +24,7 @@ public class CliArgsParser {
 	
 	// Constants ...
 	public final static String APP_NAME = new String("csvintoexcel");
-	public final static String APP_VERSION = new String("v.2019.02.22");
+	public final static String APP_VERSION = new String("v.2019.03.02");
 	public final static String APP_USAGE = new String(APP_NAME + " [<args-options-list>] - "+ APP_VERSION);
 
 	// Constants defaults ...
@@ -93,13 +93,13 @@ public class CliArgsParser {
         Option inputExcelDataTypeList = Option.builder("d")
         		.longOpt("input-excel-data-type-list") 
         		.required(false) 
-        		.desc("Lista dos tipos de dados (data-type) das células separados por '-'. Onde: 's': String; 'd': Numérico; 'f': decimais; 'u': String ")
+        		.desc("Lista dos tipos de dados (data-type) das celulas separados por '-'. Onde: 's': String; 'd': Numerico; 'f': decimais.")
         		.hasArg()
         		.build();
         Option inputCsvFileOption = Option.builder("f")
                 .longOpt("input-csv-file") 
                 .required(true) 
-                .desc("Nome do arquivo (.csv) que contem o conteúdo usado na juncao. Ex: dados.csv (separador ;)") 
+                .desc("Nome do arquivo (.csv) que contem o conteudo usado na juncao. Ex: dados.csv (separador ;)") 
         		.hasArg()
                 .build(); 
         Option inputCsvFileIgnoreHeaderOption = Option.builder("g")

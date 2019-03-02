@@ -1,12 +1,12 @@
 package org.csvintoexcel.csvintoexcel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,7 +77,7 @@ public class CsvIntoExcel {
 		System.out.println(msgCopy + " ...");
 		
 		// Open Workbook ...
-		System.out.print (msgCopy+" - opening workbook '%s' ...".replaceFirst("%s",this.cliArgsParser.getOutputExcelFileOption()));
+		System.out.println(msgCopy+" - opening workbook '%s' ...".replaceFirst("%s",this.cliArgsParser.getOutputExcelFileOption()));
 		try {
 			this.workbook = WorkbookFactory.create(new FileInputStream(this.cliArgsParser.getOutputExcelFileOption().replace("\\", "//")));
 		} catch (Exception e) {
@@ -86,8 +86,8 @@ public class CsvIntoExcel {
 			System.exit(-1);
 		}
 		
-		// Open Worksheet ..
-		System.out.println (""+msgCopy+" - opening worksheet index-position (%s) ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption()) ));
+		// Open Worksheet ...
+		System.out.print(msgCopy+" - opening worksheet index-position (%s) ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption()) ));
 		this.worksheet = this.workbook.getSheetAt(this.cliArgsParser.getInputExcelSheetNumberOption());
 		if (this.worksheet==null) {
 			try {
@@ -100,7 +100,7 @@ public class CsvIntoExcel {
 		}
 		
 		// Getting first row ..
-		System.out.print (""+msgCopy+" - row[%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
+		System.out.println("\r" + msgCopy+" - opening worksheet index-position (%s) - row[%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption()) ).replaceFirst("%s",String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())) );
 		Row row = worksheet.getRow( this.cliArgsParser.getInputExcelRowNumberOption() );
 		if (row==null) {
 			try {
@@ -114,7 +114,7 @@ public class CsvIntoExcel {
 		
 		// Getting cell ..
 		for (int j=this.cliArgsParser.getInputExcelColumnNumberOption();j<=row.getLastCellNum();j++) {
-			System.out.print ("cell[%s,%s], ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
+			System.out.print("\r" + msgCopy+" - opening worksheet index-position (%s) - cell[%s,%s] ...".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelSheetNumberOption())).replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				CellStyle cellStyle = cell.getCellStyle();
@@ -123,7 +123,6 @@ public class CsvIntoExcel {
 				}
 			}
 		}
-		
 		System.out.println("");
 	}
 	
@@ -136,7 +135,7 @@ public class CsvIntoExcel {
 		System.out.println(msgCopy + " ...");
 		
 		// Getting first row ..
-		System.out.print (""+msgCopy+" - row[%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
+		System.out.print(msgCopy+" - row[%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())));
 		Row row = worksheet.getRow( this.cliArgsParser.getInputExcelRowNumberOption() );
 		if (row==null) {
 			try {
@@ -147,11 +146,10 @@ public class CsvIntoExcel {
 				System.exit(-1);
 			}
 		}
-
 		
 		// Cleaning all cells from first rows ...
 		for (int j=this.cliArgsParser.getInputExcelColumnNumberOption();j<=row.getLastCellNum();j++) {
-			System.out.print ("cell[%s,%s], ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
+			System.out.print("\r"+msgCopy+" - row[%s] - cell[%s,%s] ... ".replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(this.cliArgsParser.getInputExcelRowNumberOption())).replaceFirst("%s", String.valueOf(j) ));
 			Cell cell = row.getCell(j);
 			if (cell!=null) {
 				cell.setCellValue("");
@@ -160,13 +158,14 @@ public class CsvIntoExcel {
 		}
 		System.out.println("");
 		
-		
 		// Remove all remaining rows after first row ...
 		for (int i=this.worksheet.getLastRowNum();i>this.cliArgsParser.getInputExcelRowNumberOption();i--) {
-			System.out.println (""+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(i) ));
+			System.out.print("\r"+msgCopy+" - row[%s] ...".replaceFirst("%s", String.valueOf(i) ));
 			Row rowToRemove = worksheet.getRow( i );
 			worksheet.removeRow(rowToRemove);
 		}
+		System.out.println("");
+		
 	}
 	
 	
@@ -183,12 +182,19 @@ public class CsvIntoExcel {
 		}
 		// Reading file ...
 		BufferedReader br = null;
-		FileReader fr = null;
+		InputStreamReader isr = null;
 		int currentLineNumber = 0;
 		int nRowNumWorksheet = this.cliArgsParser.getInputExcelRowNumberOption();
 		try {
-			fr = new FileReader(this.cliArgsParser.getInputCsvFileOption());
-			br = new BufferedReader(fr);
+			// If UTF file format defined for (.csv) ...  
+			if (!cliArgsParser.getOutputExcelUtfEncoding().isEmpty()) {
+				File fileDir = new File(this.cliArgsParser.getInputCsvFileOption());
+				isr = new InputStreamReader(new FileInputStream(fileDir), cliArgsParser.getOutputExcelUtfEncoding());
+			} else {
+				File fileDir = new File(this.cliArgsParser.getInputCsvFileOption());
+				isr = new InputStreamReader(new FileInputStream(fileDir));
+			}
+			br = new BufferedReader(isr);
 			String sCurrentLine;
 			// Loop content rows ...
 			while ((sCurrentLine = br.readLine()) != null) {
@@ -201,7 +207,7 @@ public class CsvIntoExcel {
 							|| (currentLineNumber >= 10000 && currentLineNumber < 100000 && currentLineNumber % 5000 == 0)
 							|| (currentLineNumber >= 100000 && currentLineNumber % 10000 == 0)
 						) {
-						System.out.println(msgCopy + " - '%s'[%s] -> '%s'[%s]".replaceFirst("%s", this.cliArgsParser.getInputCsvFileOption()).replaceFirst("%s", String.valueOf(currentLineNumber)).replaceFirst("%s", this.cliArgsParser.getOutputExcelFileOption()).replaceFirst("%s", String.valueOf(nRowNumWorksheet) ));
+						System.out.print("\r" + msgCopy + " - row: %s".replaceFirst("%s", String.valueOf(currentLineNumber) ));
 					}
 					// Get a list with each csv value ..
 					ArrayList aCsvValues= new ArrayList(Arrays.asList(sCurrentLine.split(";")));
@@ -260,18 +266,6 @@ public class CsvIntoExcel {
 											} catch(Exception e) {
 												// Sorry! Could't convert as BigDecimal
 											}
-										} else if (aDataTypeList.get(j).equals("u")) {
-											// 'u' - String with UTF Encoding conversion ...
-											if (!cliArgsParser.getOutputExcelUtfEncoding().isEmpty()) {
-												try {
-													System.out.print(" [" + csvValue + "]"+ "->" + cliArgsParser.getOutputExcelUtfEncoding() );
-													csvValue = URLEncoder.encode(csvValue, cliArgsParser.getOutputExcelUtfEncoding()); 
-													System.out.print(" = [" + csvValue + "]" );
-												} catch(Exception e) {
-													System.out.println(" Error !");
-													// Sorry! Could't convert UTF
-												}
-											}
 										}
 									}
 								}
@@ -290,7 +284,9 @@ public class CsvIntoExcel {
 				}
 				currentLineNumber++;
 			}
-			System.out.println(msgCopy + " - '%s'[%s] -> '%s'[%s]".replaceFirst("%s", this.cliArgsParser.getInputCsvFileOption()).replaceFirst("%s", String.valueOf(currentLineNumber)).replaceFirst("%s", this.cliArgsParser.getOutputExcelFileOption()).replaceFirst("%s", String.valueOf(nRowNumWorksheet) ));
+			System.out.println("");
+			System.out.print("\r" + msgCopy + " - row: %s".replaceFirst("%s", String.valueOf(currentLineNumber) ));
+			System.out.println("");
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			System.exit(-1);
@@ -298,8 +294,8 @@ public class CsvIntoExcel {
 			try {
 				if (br != null)
 					br.close();
-				if (fr != null)
-					fr.close();
+				if (isr != null)
+					isr.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
