@@ -1,0 +1,44 @@
+/* 
+ * Filename : 10 - STD-FRONTEND - MdrMinimo.sql
+ * Author   : josemarsilva@inmetrics.com.br
+ * Date     : 2019-02-01
+ * Premissas: 
+ *            * Layout obtido em 01/02/2019 de Danilo Morais da Yaman:
+ *              - Formato: (.xlsx)
+ *              - Colunas: 
+ *                | Número do EC | Categoria |
+ *                - Domínio de valores e significado de "Número do EC" (obrigatório): EC
+ *                - Domínio de valores e significado de "Categoria" (obrigatório): A,B,C,D,E,F,G,H
+ *              - Regras:
+ *                - EC's reservados para StressTest, transacionados pelo GeradorMassa ( dt_batch, nu_load_file)
+ *                * [TO-DO] Requisito EC convivencia cadastral, financeira ou full star. Não importa a questão individual
+ *              - Exemplo de massa:
+ *
+ *            * Fluxo de Negócio: Montar lista com EC 
+ *            * Importante que o esta planilha tem uma "carcaça" que tem títulos de colunas iniciando na linha 2 e não pode ser desrespeitado. Sera preciso exportar o resultado da query em outra planilha e depois copiar e colar a partir da celula A3
+ *            * Query:
+ *            * [TO-DO] Fazer como o categoria uma letra para cada dia da semana
+ */
+ 
+ SELECT TO_CHAR(m.nu_customer)                              AS "Numero do EC", 
+        DECODE( MOD(TO_NUMBER(TO_CHAR(SYSDATE,'d')),7),
+         1, 'A',
+         2, 'B',
+         3, 'C',
+         4, 'D',
+         5, 'E',
+         6, 'F',
+            'G'
+        )                                                   AS "Categoria"
+ FROM   TBCTMR_MERCHANT m
+ WHERE  1=1
+        /* Condition */ 
+ AND    EXISTS
+        (
+          SELECT 'X' FROM PERFSTAR.PERF_CLIENTE_TRANSACAO ct WHERE ct.nu_customer = m.nu_customer
+        )
+ AND    ROWNUM <= 200000
+ AND    ROWNUM <= 1500 /* e-mail Nilton Amancio 22/02 */
+        /* Order by */
+ ORDER  BY m.nu_customer
+ 

@@ -1,0 +1,52 @@
+/* 
+ * Filename : 06 - STD-FRONTEND - IncentivoDeAluguel.sql
+ * Author   : josemarsilva@inmetrics.com.br
+ * Date     : 2019-02-14
+ * Premissas: 
+ *            * Layout obtido em 07/11/2018:
+ *              - Formato: (.xlsx)
+ *              - Colunas: 
+ *              - Regras:
+ *                - EC's reservados para StressTest, transacionados pelo GeradorMassa ( dt_batch, nu_load_file)
+ *              - Exemplo de massa:
+ *                | Diretoria | Célula| Solicitante | Data | Cadeia de Pagamento | Maquineta | Número lógico | Tipo Solução/Planos   | Valor a ser Cobrado $ | Desconto % | Período (meses) | Retorno QGI | Observações | Aplicação de Incentivo | Status |
+ *                |           |       |             |      |                     |           |               | TEF DEDICADO (PINPAD) |	100,00               | 25%        | 10              |             |             |                        |        |
+ *            * Fluxo de Negócio: 
+ *            * TO-DO:
+ *              - 2019-02-27 Alex avisou que a primeira linha está deslocada na planilha excel
+ *              - 2019-02-22 E-mail Nilton Amancio retirando do escopo
+ */
+ 
+ SELECT DISTINCT
+        ''                      AS "Dummy",
+        ''                      AS "Diretoria",
+        ''                      AS "Célula",
+        ''                      AS "Solicitante",
+        ''                      AS "Data",
+        ''                      AS "Cadeia de Pagamento",
+        TO_CHAR(ct.nu_customer) AS "Maquineta",
+        ''                      AS "Número lógico",
+        'TEF DEDICADO (PINPAD)' AS "Tipo Solução/Planos",
+        '100,00'                AS "Valor a ser Cobrado $",
+        '0,25'                  AS "Desconto %",
+        '10'                    AS "Período (meses)",
+        ''                      AS "Retorno QGI",
+        ''                      AS "Observações",
+        ''                      AS "Aplicação de Incentivo",
+        ''                      AS "Status"
+ FROM   TBCAPR_CAPTURED_TRANSACTION ct,
+        TBPRDR_CARD_ASSOCIATION ca
+ WHERE  1=1 
+        /* Join */ 
+ AND    ct.cd_card_association = ca.cd_card_association
+        /* Condition */ 
+ AND    ct.dt_batch = TO_DATE('28/02/2019','DD/MM/YYYY')
+ AND    ct.nu_load_file_id = 12864870
+ AND    EXISTS
+        (
+          SELECT 'X' FROM PERFSTAR.PERF_CLIENTE_TRANSACAO perf WHERE  perf.nu_customer = ct.nu_customer
+        )
+ AND    ROWNUM <= 200000
+ AND    ROWNUM <= 1000
+        /* Order by */ 
+ ORDER  BY ct.nu_customer

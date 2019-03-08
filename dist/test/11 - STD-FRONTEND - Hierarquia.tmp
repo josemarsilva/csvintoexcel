@@ -1,0 +1,42 @@
+/* 
+ * Filename : 11 - STD-FRONTEND - Hierarquia.sql
+ * Author   : josemarsilva@inmetrics.com.br
+ * Date     : 2019-02-01
+ * Premissas: 
+ *            * Layout obtido em 01/02/2019 de Danilo Morais da Yaman:
+ *              - Formato: (.xlsx)
+ *              - Colunas: 
+ *              - | Matriz     | Referência | Operação | Filial                  | Associação | Cadeia | Status | Classe | CNPJ | Razão Social | Domicílio | VisaVale | Domicílio VV | Tipo Pagamento | Tipo de Cadeia Informada | Moeda | Mensagens | Solicitante | Mat.Cadeia | Ec Migrado |
+ *                | 1004164782 |            | 1        | 1004164790, 1004164804  |            |        |        |        |      |              |           |          |              |                |                          |       |           |             |            |            |
+ *                - Domínio de valores e significado de "Matriz" (obrigatório): EC
+ *                - Domínio de valores e significado de "Operação" (obrigatório): valor 1 = Criar Gupo; 2 = Incluir EC em Grupo; 3 - Remover EC do Grupo
+ *                - Domínio de valores e significado de "Filial" (obrigatório): Lista de EC's separados por vírgulas
+ *              - Regras:
+ *                - EC's reservados para StressTest, transacionados pelo GeradorMassa ( dt_batch, nu_load_file)
+ *                - É preciso implementar EC's na mesma raiz de CPNJ
+ *                
+ *              - Exemplo de massa:
+ *
+ *            * Fluxo de Negócio: Criar / desmontar um grupo 
+ *            * [TO-DO] Requisito todos os EC's do grupo tem que estar na mesma raiz de CNPJ
+ *            * [TO-DO] Requisito de gerar as 3 operações: Criar Grupo / Incluir EC em Grupo / Excluir EC em Grupo
+ *            * [TO-DO] Requisito de EC's não pode ter RECEBA RÁPIDO
+ *            * Importante que o esta planilha tem uma "carcaça" que tem títulos de colunas iniciando na linha 2 e não pode ser desrespeitado. Sera preciso exportar o resultado da query em outra planilha e depois copiar e colar a partir da celula A3
+ *            * Query:
+ */
+ 
+ SELECT TO_CHAR(m.nu_customer)             AS "Matriz", 
+        ''                                 AS "Referencia",
+        '1'                                AS "Operacao",
+        '1004164790, 1004164804'           AS "Filial"
+ FROM   TBCTMR_MERCHANT m
+ WHERE  1=1
+        /* Condition */ 
+ AND    EXISTS
+        (
+          SELECT 'X' FROM PERFSTAR.PERF_CLIENTE_TRANSACAO ct WHERE ct.nu_customer = m.nu_customer
+        )
+ AND    ROWNUM <= 200000
+ AND    ROWNUM <= 15000 /* e-mail Nilton Amancio 22/02 */
+        /* Order by */
+ ORDER  BY m.nu_customer
